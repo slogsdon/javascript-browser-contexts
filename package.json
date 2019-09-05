@@ -1,0 +1,7 @@
+{
+  "name": "windows",
+  "version": "1.0.0",
+  "main": "windows.js",
+  "license": "MIT",
+  "private": true
+}
