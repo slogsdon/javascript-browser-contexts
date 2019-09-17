@@ -2,12 +2,19 @@
 
 import { OpenedWindow } from "./opened-window.js";
 
+/** Helper to determine if current context is the top window */
 export const isTopWindow = () => window === top;
+
+/** Helper to determine if current context is a parent window */
 export const isParentWindow = () => window === parent;
+
+/** Helper to determine if current context is a popup window */
 export const isPopupWindow = () => null !== opener;
 
 /**
- * @param {object} [options] 
+ * Initialize a new window. Facilitates parent/child communication
+ *
+ * @param {object} [options]
  * @return {object}
  */
 export function init(options) {
@@ -20,19 +27,22 @@ export function init(options) {
     initialData = JSON.parse(atob(window.location.hash.replace("#", "")));
   }
 
-  const loadMessage = {action: "load", windowId: initialData.id};
-  if (isPopupWindow()) {
-    opener.postMessage(loadMessage, initialData.origin);
-  } else if (!isTopWindow()) {
-    parent.postMessage(loadMessage, initialData.origin);
-  }
+  const loadMessage = { action: "load", windowId: initialData.id };
+
+  (isPopupWindow() ? opener : parent)
+    .postMessage(loadMessage, initialData.origin);
 
   return initialData;
 }
 
 /**
+ * Creates a new child window. Currently supported child window types:
+ *
+ * - iframe
+ * - popup
+ *
  * @param {string} src
- * @param {object} [options] 
+ * @param {object} [options]
  * @return {OpenedWindow}
  */
 export function createWindow(src, options) {
@@ -83,7 +93,10 @@ export function createWindow(src, options) {
 }
 
 /**
- * @param {string} src 
+ * Internal helper to obtain the origin of a URL
+ *
+ * @access private
+ * @param {string} src
  */
 function getOrigin(src) {
   const a = document.createElement("a");
@@ -91,10 +104,22 @@ function getOrigin(src) {
   return a.origin;
 }
 
+/**
+ * Internal helper to create a unique ID
+ *
+ * @access private
+ * @return {string}
+ */
 function generateId() {
   return btoa(generateGuid());
 }
 
+/**
+ * Internal helper to create a GUID
+ *
+ * @access private
+ * @return {string}
+ */
 function generateGuid() {
   const S4 = () => {
     // tslint:disable-next-line:no-bitwise
