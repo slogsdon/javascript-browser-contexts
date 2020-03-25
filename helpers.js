@@ -36,17 +36,32 @@ export function init(options) {
 }
 
 /**
+ * @typedef {object} WindowOptions
+ *
+ * @property {boolean} [isPopup=false]
+ * @property {string=} id
+ * @property {number} [width=10]
+ * @property {number} [height=10]
+ * @property {boolean} [showMenuBar=false]
+ * @property {boolean} [showLocation=false]
+ * @property {boolean} [isResizable=false]
+ * @property {boolean} [showScrollBars=false]
+ * @property {boolean} [showStatusBar=false]
+ * @property {boolean} [hide=false]
+ */
+
+/**
  * Creates a new child window. Currently supported child window types:
  *
  * - iframe
  * - popup
  *
  * @param {string} src
- * @param {object} [options]
+ * @param {WindowOptions} [options]
  * @return {OpenedWindow}
  */
 export function createWindow(src, options) {
-  options = options || {};
+  options = options || /** @type WindowOptions */ ({});
 
   const isPopup = options.isPopup || false;
   /** @type any */
@@ -85,8 +100,8 @@ export function createWindow(src, options) {
   const win = document.createElement("iframe");
   win.id = initialData.id;
   win.src = `${src}#${btoa(JSON.stringify(initialData))}`;
-  win.width = options.width || 10;
-  win.height = options.height || 10;
+  win.width = (options.width || 10).toString();
+  win.height = (options.height || 10).toString();
   win.style.display = options.hide === true ? "none" : "normal";
 
   return new OpenedWindow(initialData.id, getOrigin(src), win);
