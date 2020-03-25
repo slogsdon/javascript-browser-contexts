@@ -24,13 +24,17 @@ export function init(options) {
   let initialData = {};
 
   if (isPopupWindow() || !isTopWindow()) {
-    initialData = JSON.parse(atob(window.location.hash.replace("#", "")));
+    try {
+      initialData = JSON.parse(atob(window.location.hash.replace("#", "")));
+    } catch (e) {
+      /** catch in case other data is present in parent window hash */
+    }
   }
 
   const loadMessage = { action: "load", windowId: initialData.id };
 
   (isPopupWindow() ? opener : parent)
-    .postMessage(loadMessage, initialData.origin);
+    .postMessage(loadMessage, initialData.origin || window.location.origin);
 
   return initialData;
 }
