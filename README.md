@@ -1,18 +1,15 @@
 # windows
 
-> Thin wrapper around HTMLElement to support hydration of server-side rendered custom elements
+> Thin wrapper for creating iframes and popup windows with a consistent developer experience
 
 ### Features
 
 - Plain JavaScript
-- Native [web components](https://developer.mozilla.org/en-US/docs/Web/Web_Components)
-- Minimal dependencies
+- Zero dependencies
 
 ### Reasoning
 
-JavaScript is readily available and flexible. Modern browser JavaScript is more than capable.
-
-This project also scratches an itch to see how much JavaScript and non-Node.js server environments can work together to handle this problem domain.
+Creating, managing, and interacting with iframes and popup windows can be tricky without the correct setup. This library was created to consolidated learnings from other projects.
 
 ## License
 
