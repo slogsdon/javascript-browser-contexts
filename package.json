@@ -5,7 +5,7 @@
     "email": "shane@shanelogsdon.com",
     "name": "Shane Logsdon"
   },
-  "version": "0.5.0",
+  "version": "0.5.1",
   "main": "browser-contexts.js",
   "license": "MIT",
   "repository": {
