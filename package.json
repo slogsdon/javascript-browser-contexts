@@ -1,7 +1,15 @@
 {
-  "name": "windows",
-  "version": "1.0.0",
-  "main": "windows.js",
+  "name": "browser-contexts",
+  "description": "Thin wrapper for creating iframes and popup windows with a consistent developer experience",
+  "author": {
+    "email": "shane@shanelogsdon.com",
+    "name": "Shane Logsdon"
+  },
+  "version": "0.5.0",
+  "main": "browser-contexts.js",
   "license": "MIT",
-  "private": true
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/slogsdon/javascript-browser-contexts"
+  }
 }

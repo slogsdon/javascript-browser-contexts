@@ -1,4 +1,4 @@
-# windows
+# browser-contexts
 
 > Thin wrapper for creating iframes and popup windows with a consistent developer experience
 
@@ -9,7 +9,7 @@
 
 ### Reasoning
 
-Creating, managing, and interacting with iframes and popup windows can be tricky without the correct setup. This library was created to consolidated learnings from other projects.
+Creating, managing, and interacting with iframes and popup windows can be tricky without the correct setup. This library was created to consolidate learnings from other projects.
 
 ## License
 
