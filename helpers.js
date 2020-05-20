@@ -2,6 +2,13 @@
 
 import { OpenedWindow } from "./opened-window.js";
 
+/**
+ * @typedef {object} NewWindowMessageData
+ * 
+ * @property {string=} id
+ * @property {string=} origin 
+ */
+
 /** Helper to determine if current context is the top window */
 export const isTopWindow = () => window === top;
 
@@ -20,7 +27,7 @@ export const isPopupWindow = () => null !== opener;
 export function init(options) {
   options = options || {};
 
-  /** @type {any} */
+  /** @type {NewWindowMessageData} */
   let initialData = {};
 
   if (isPopupWindow() || !isTopWindow()) {
@@ -68,16 +75,26 @@ export function createWindow(src, options) {
   options = options || /** @type WindowOptions */ ({});
 
   const isPopup = options.isPopup || false;
-  /** @type any */
+  /** @type NewWindowMessageData */
   const initialData = {};
   // scope the eventual `postMessage` call from the popup
   // to the current origin
   initialData.origin = window.location.origin;
+  initialData.id = options.id || generateId();
 
-  if (isPopup) {
-    initialData.id = options.id || generateId();
-    // build window options
-    const opts =
+  const win = (isPopup ? createPopup : createIframe)(src, initialData, options);
+  return new OpenedWindow(initialData.id, getOrigin(src), win);
+}
+
+/**
+ * Internal helper to create a popup
+ *
+ * @param {string} src 
+ * @param {NewWindowMessageData} initialData
+ * @param {WindowOptions} options
+ */
+function createPopup(src, initialData, options) {
+  const opts =
       [
         ['width', options.width || 10],
         ['height', options.height || 10],
@@ -89,7 +106,7 @@ export function createWindow(src, options) {
       ]
       .map(item => `${item[0]}=${item[1]}`)
       .join(',');
-    const win = window.open(
+    return window.open(
       // send all initial data via the location hash. another option
       // here would be to wait for the popup window to completely
       // load and use `postMessage` to send this data
@@ -97,18 +114,25 @@ export function createWindow(src, options) {
       initialData.id,
       opts
     );
-    return new OpenedWindow(initialData.id, getOrigin(src), win);
-  }
+}
 
-  initialData.id = options.id || generateId();
+/**
+ * Internal helper to create an iframe
+ *
+ * @param {string} src 
+ * @param {NewWindowMessageData} initialData
+ * @param {WindowOptions} options
+ */
+function createIframe(src, initialData, options) {
   const win = document.createElement("iframe");
-  win.id = initialData.id;
+  if (initialData.id) {
+    win.id = initialData.id;
+  }
   win.src = `${src}#${btoa(JSON.stringify(initialData))}`;
   win.width = (options.width || 10).toString();
   win.height = (options.height || 10).toString();
   win.style.display = options.hide === true ? "none" : "normal";
-
-  return new OpenedWindow(initialData.id, getOrigin(src), win);
+  return win;
 }
 
 /**

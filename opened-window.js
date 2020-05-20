@@ -35,16 +35,22 @@ export class OpenedWindow {
       if (e.origin !== this.origin) {
         return;
       }
+
       // verify only load events are handled
       if (!e.data.action || e.data.action !== "load") {
         return;
       }
+
       // verify load event is triggered only for expected window
       if (!e.data.windowId || e.data.windowId !== this.id) {
         return;
       }
+
       this.loaded = true;
-      this.onloadCallback && this.onloadCallback();
+
+      if (this.onloadCallback) {
+        this.onloadCallback();
+      }
     });
 
     knownWindows[id] = this;
@@ -104,4 +110,4 @@ export class OpenedWindow {
 /** Gets all known `OpenedWindow` instances */
 OpenedWindow.all = () => {
   return knownWindows;
-}
+};
