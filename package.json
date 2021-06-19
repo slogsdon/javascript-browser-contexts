@@ -5,10 +5,10 @@
     "email": "shane@shanelogsdon.com",
     "name": "Shane Logsdon"
   },
-  "version": "0.5.3",
+  "version": "0.5.4",
   "main": "browser-contexts.js",
   "module": "browser-contexts.js",
-  "sideEffect": false,
+  "sideEffects": false,
   "license": "MIT",
   "repository": {
     "type": "git",
