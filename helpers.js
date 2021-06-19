@@ -4,9 +4,9 @@ import { OpenedWindow } from "./opened-window.js";
 
 /**
  * @typedef {object} NewWindowMessageData
- * 
+ *
  * @property {string=} id
- * @property {string=} origin 
+ * @property {string=} origin
  */
 
 /** Helper to determine if current context is the top window */
@@ -38,9 +38,13 @@ export function init(options) {
     }
   }
 
-  const loadMessage = { action: "load", windowId: initialData.id };
+  const loadMessage = {
+    action: "load",
+    options: options,
+    windowId: initialData.id,
+  };
 
-  (isPopupWindow() ? opener : parent)
+  (isPopupWindow() && opener ? opener : parent)
     .postMessage(loadMessage, initialData.origin || window.location.origin);
 
   return initialData;
@@ -83,13 +87,13 @@ export function createWindow(src, options) {
   initialData.id = options.id || generateId();
 
   const win = (isPopup ? createPopup : createIframe)(src, initialData, options);
-  return new OpenedWindow(initialData.id, getOrigin(src), win);
+  return new OpenedWindow(initialData.id, win, getOrigin(src));
 }
 
 /**
  * Internal helper to create a popup
  *
- * @param {string} src 
+ * @param {string} src
  * @param {NewWindowMessageData} initialData
  * @param {WindowOptions} options
  */
@@ -119,7 +123,7 @@ function createPopup(src, initialData, options) {
 /**
  * Internal helper to create an iframe
  *
- * @param {string} src 
+ * @param {string} src
  * @param {NewWindowMessageData} initialData
  * @param {WindowOptions} options
  */

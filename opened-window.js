@@ -12,10 +12,10 @@ const knownWindows = {};
 export class OpenedWindow {
   /**
    * @param {string} id Desired ID for the window. Should be unique across all windows.
-   * @param {string} [origin] Desired window origin. Default: `window.location.origin`.
    * @param {HTMLIFrameElement | Window | null} root Root window node.
+   * @param {string} [origin] Desired window origin. Default: `window.location.origin`.
    */
-  constructor(id, origin, root) {
+  constructor(id, root, origin) {
     /** Current window's unique ID */
     this.id = id;
     /** Current window's origin */
@@ -24,6 +24,9 @@ export class OpenedWindow {
     this.root = root;
     /** Current window's load state */
     this.loaded = false;
+    /** Current window's options */
+    this.options = {};
+
     /**
      * @type {Function?}
      * @access private
@@ -47,6 +50,7 @@ export class OpenedWindow {
       }
 
       this.loaded = true;
+      this.options = e.data.options || {};
 
       if (this.onloadCallback) {
         this.onloadCallback();
