@@ -1,17 +1,32 @@
 {
   "name": "browser-contexts",
   "description": "Thin wrapper for creating iframes and popup windows with a consistent developer experience",
+  "keywords": ["browser", "contexts", "window", "iframe", "popup"],
   "author": {
     "email": "shane@shanelogsdon.com",
     "name": "Shane Logsdon"
   },
-  "version": "0.5.4",
-  "main": "browser-contexts.js",
-  "module": "browser-contexts.js",
+  "version": "0.5.5",
+  "main": "./browser-contexts.js",
+  "module": "./browser-contexts.js",
+  "types": "./browser-contexts.d.ts",
+  "exports": {
+    ".": {
+      "require": "./browser-contexts.js",
+      "import": "./browser-contexts.js",
+      "default": "./browser-contexts.js"
+    }
+  },
   "sideEffects": false,
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/slogsdon/javascript-browser-contexts"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^4.3"
   }
 }

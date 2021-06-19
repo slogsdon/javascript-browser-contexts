@@ -1,7 +1,11 @@
 {
+  "include": [
+    "**/*.js"
+  ],
   "compilerOptions": {
     "allowJs": true,
-    "noEmit": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "strict": true,
     "target": "es2015"
   }

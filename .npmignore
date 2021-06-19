@@ -2,3 +2,4 @@
 example/
 tsconfig.json
 tslint.json
+!*.d.ts
