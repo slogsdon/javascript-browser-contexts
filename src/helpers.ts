@@ -2,18 +2,24 @@ import { OpenedWindow } from "./opened-window";
 import { NewWindowMessageData, WindowOptions } from "./types";
 
 /** Helper to determine if current context is the top window */
-export const isTopWindow = () => window === top;
+export function isTopWindow(): boolean {
+  return window === top;
+}
 
 /** Helper to determine if current context is a parent window */
-export const isParentWindow = () => window === parent;
+export function isParentWindow(): boolean {
+  return window === parent;
+}
 
 /** Helper to determine if current context is a popup window */
-export const isPopupWindow = () => null !== opener;
+export function isPopupWindow(): boolean {
+  return null !== opener;
+}
 
 /**
  * Initialize a new window. Facilitates parent/child communication
  */
-export function init(options?: object): NewWindowMessageData {
+export function init(options?: WindowOptions): NewWindowMessageData {
   options = options || {};
 
   let initialData: NewWindowMessageData = {};
@@ -34,7 +40,7 @@ export function init(options?: object): NewWindowMessageData {
 
   try {
     (isPopupWindow() && opener ? opener : parent)
-      .postMessage(loadMessage, initialData.origin || window.location.origin);
+      .postMessage(loadMessage, options.origin || initialData.origin || window.location.origin);
   } catch (e) {
     // tslint:disable-next-line:no-console
     console.error(e);

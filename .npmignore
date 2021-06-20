@@ -1,6 +1,8 @@
 .devcontainer/
 example/
 !lib/
+src/
+tests/
 cypress.json
 tsconfig.json
 tslint.json

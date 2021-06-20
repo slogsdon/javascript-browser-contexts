@@ -12,7 +12,7 @@
     "email": "shane@shanelogsdon.com",
     "name": "Shane Logsdon"
   },
-  "version": "0.5.6",
+  "version": "0.5.8",
   "main": "./lib/browser-contexts.js",
   "module": "./lib/browser-contexts.js",
   "types": "./lib/browser-contexts.d.ts",
@@ -33,11 +33,15 @@
     "build": "tsc",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
+    "prepublishOnly": "npm run build",
     "start": "php -S 0.0.0.0:8888",
-    "test": "start-server-and-test start http://localhost:8888/example/ cypress:run"
+    "test": "eslint && start-server-and-test start http://localhost:8888/example/ cypress:run"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.27.0",
+    "@typescript-eslint/parser": "^4.27.0",
     "cypress": "^7.5.0",
+    "eslint": "^7.29.0",
     "start-server-and-test": "^1.12.5",
     "typescript": "^4.3"
   }

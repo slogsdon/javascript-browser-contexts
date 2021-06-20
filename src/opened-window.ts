@@ -64,7 +64,7 @@ export class OpenedWindow {
   }
 
   /** Gets the underlying `Window` object */
-  get window() {
+  get window(): Window | null {
     return this.root instanceof HTMLIFrameElement ? this.root.contentWindow : this.root;
   }
 
@@ -73,7 +73,7 @@ export class OpenedWindow {
    *
    * @param data Message data to send
    */
-  postMessage(data: any) {
+  postMessage(data: Record<string, string | boolean | number | Record<string, unknown>>): void {
     if (!this.window) {
       return;
     }
@@ -91,7 +91,7 @@ export class OpenedWindow {
    *
    * @param fn Desired callback
    */
-  onload(fn: () => void) {
+  onload(fn: () => void): void {
     if (this.loaded === true) {
       fn();
     }
@@ -104,7 +104,7 @@ export class OpenedWindow {
    *
    * @param target Destination for the window
    */
-  appendTo(target: Node) {
+  appendTo(target: Node): void {
     if (!target || !target.appendChild) {
       return;
     }
@@ -121,7 +121,7 @@ export class OpenedWindow {
   /**
    * Gets all known `OpenedWindow` instances
    */
-  static all() {
+  static all(): IKnownWindows {
     return knownWindows;
   }
 }
