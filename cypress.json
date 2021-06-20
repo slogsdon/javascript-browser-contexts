@@ -1,0 +1,13 @@
+{
+    "chromeWebSecurity": true,
+    "componentFolder": "tests/component",
+    "downloadsFolder": "tests/downloads",
+    "fixturesFolder": "tests/fixtures",
+    "integrationFolder": "tests/integration",
+    "pluginsFile": "tests/plugins",
+    "screenshotsFolder": "tests/screenshots",
+    "supportFile": "tests/support",
+    "testFiles": "**/*.*",
+    "video": false,
+    "videosFolder": "tests/videos"
+}

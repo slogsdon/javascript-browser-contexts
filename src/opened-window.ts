@@ -1,7 +1,9 @@
-// @ts-check
+import { WindowOptions } from "./types";
 
-/** @type {{[key: string]: OpenedWindow}} */
-const knownWindows = {};
+export interface IKnownWindows {
+  [key: string]: OpenedWindow;
+}
+const knownWindows: IKnownWindows = {};
 
 /**
  * Wrapper around supported child window types:
@@ -10,28 +12,29 @@ const knownWindows = {};
  * - popup
  */
 export class OpenedWindow {
-  /**
-   * @param {string} id Desired ID for the window. Should be unique across all windows.
-   * @param {HTMLIFrameElement | Window | null} root Root window node.
-   * @param {string} [origin] Desired window origin. Default: `window.location.origin`.
-   */
-  constructor(id, root, origin) {
-    /** Current window's unique ID */
-    this.id = id;
-    /** Current window's origin */
-    this.origin = origin || window.location.origin;
-    /** Current window's underlying implementation */
-    this.root = root;
-    /** Current window's load state */
-    this.loaded = false;
-    /** Current window's options */
-    this.options = {};
+  /** Current window's unique ID */
+  public id: string;
+  /** Current window's origin */
+  public origin: string;
+  /** Current window's underlying implementation */
+  public root: HTMLIFrameElement | Window | null;
+  /** Current window's load state */
+  public loaded = false;
+  /** Current window's options */
+  public options: WindowOptions;
+  private onloadCallback?: () => void;
 
-    /**
-     * @type {Function?}
-     * @access private
-     */
-    this.onloadCallback = null;
+  /**
+   * @param id Desired ID for the window. Should be unique across all windows.
+   * @param root Root window node.
+   * @param origin Desired window origin. Default: `window.location.origin`.
+   */
+  constructor(id: string, root: HTMLIFrameElement | Window | null, origin?: string) {
+    this.id = id;
+    this.origin = origin || window.location.origin;
+    this.root = root;
+    this.loaded = false;
+    this.options = { id };
 
     window.addEventListener("message", (e) => {
       // verify expected origin
@@ -68,22 +71,27 @@ export class OpenedWindow {
   /**
    * Helper for sending messages to a window
    *
-   * @param {any} data Message data to send
+   * @param data Message data to send
    */
-  postMessage(data) {
+  postMessage(data: any) {
     if (!this.window) {
       return;
     }
 
-    this.window.postMessage(data, this.origin);
+    try {
+      this.window.postMessage(data, this.origin);
+    } catch (e) {
+      // tslint:disable-next-line:no-console
+      console.error(e);
+    }
   }
 
   /**
    * Sets the `load` event callback function
    *
-   * @param {() => void} fn Desired callback
+   * @param fn Desired callback
    */
-  onload(fn) {
+  onload(fn: () => void) {
     if (this.loaded === true) {
       fn();
     }
@@ -94,9 +102,9 @@ export class OpenedWindow {
   /**
    * Helper for appending windows to a parent
    *
-   * @param {Node} target Destination for the window
+   * @param target Destination for the window
    */
-  appendTo(target) {
+  appendTo(target: Node) {
     if (!target || !target.appendChild) {
       return;
     }
@@ -109,9 +117,11 @@ export class OpenedWindow {
     // ensure iframe has been added to the DOM
     knownWindows[this.id] = this;
   }
-}
 
-/** Gets all known `OpenedWindow` instances */
-OpenedWindow.all = () => {
-  return knownWindows;
-};
+  /**
+   * Gets all known `OpenedWindow` instances
+   */
+  static all() {
+    return knownWindows;
+  }
+}

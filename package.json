@@ -1,20 +1,26 @@
 {
   "name": "browser-contexts",
   "description": "Thin wrapper for creating iframes and popup windows with a consistent developer experience",
-  "keywords": ["browser", "contexts", "window", "iframe", "popup"],
+  "keywords": [
+    "browser",
+    "contexts",
+    "window",
+    "iframe",
+    "popup"
+  ],
   "author": {
     "email": "shane@shanelogsdon.com",
     "name": "Shane Logsdon"
   },
-  "version": "0.5.5",
-  "main": "./browser-contexts.js",
-  "module": "./browser-contexts.js",
-  "types": "./browser-contexts.d.ts",
+  "version": "0.5.6",
+  "main": "./lib/browser-contexts.js",
+  "module": "./lib/browser-contexts.js",
+  "types": "./lib/browser-contexts.d.ts",
   "exports": {
     ".": {
-      "require": "./browser-contexts.js",
-      "import": "./browser-contexts.js",
-      "default": "./browser-contexts.js"
+      "require": "./lib/browser-contexts.js",
+      "import": "./lib/browser-contexts.js",
+      "default": "./lib/browser-contexts.js"
     }
   },
   "sideEffects": false,
@@ -24,9 +30,15 @@
     "url": "https://github.com/slogsdon/javascript-browser-contexts"
   },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "start": "php -S 0.0.0.0:8888",
+    "test": "start-server-and-test start http://localhost:8888/example/ cypress:run"
   },
   "devDependencies": {
+    "cypress": "^7.5.0",
+    "start-server-and-test": "^1.12.5",
     "typescript": "^4.3"
   }
 }

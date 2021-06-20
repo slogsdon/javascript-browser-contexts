@@ -1,6 +1,6 @@
 // @ts-check
 
-import { init } from "../browser-contexts.js";
+import { init } from "../lib/browser-contexts.js";
 
 // all windows should call init
 init();

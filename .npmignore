@@ -1,5 +1,6 @@
 .devcontainer/
 example/
+!lib/
+cypress.json
 tsconfig.json
 tslint.json
-!*.d.ts
