@@ -1,2 +1,2 @@
-export * from "./opened-window.js";
+export * from "./browser-context.js";
 export * from "./helpers.js";

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <script type="module">
-  import { createWindow, OpenedWindow } from "../../lib/browser-contexts.js";
-  window.getAllOpenedWindows = () => OpenedWindow.all();
+  import { createWindow, BrowserContext } from "../../lib/browser-contexts.js";
+  window.getAllBrowserContexts = () => BrowserContext.all();
   window.createWindow = (src, options) => createWindow(src, options);
 </script>

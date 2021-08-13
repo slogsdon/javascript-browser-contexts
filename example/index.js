@@ -1,7 +1,7 @@
 // @ts-check
 /* global window, document, console */
 
-import { init, createWindow, OpenedWindow } from "../lib/browser-contexts.js";
+import { init, createWindow, BrowserContext } from "../lib/browser-contexts.js";
 
 // all windows should call init
 init();
@@ -23,7 +23,7 @@ createIframe && createIframe.addEventListener("click", () => {
   // take action once the iframe is loaded
   iframe.onload(() => {
     iframe.postMessage({"message": "hello iframe"});
-    console.log(OpenedWindow.all());
+    console.log(BrowserContext.all());
   });
 });
 
@@ -40,7 +40,7 @@ createNestedIframe && createNestedIframe.addEventListener("click", () => {
   // take action once the iframe is loaded
   iframe.onload(() => {
     iframe.postMessage({"message": "hello nested iframe"});
-    console.log(OpenedWindow.all());
+    console.log(BrowserContext.all());
   });
 });
 

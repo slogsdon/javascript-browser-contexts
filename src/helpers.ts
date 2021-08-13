@@ -1,4 +1,4 @@
-import { OpenedWindow } from "./opened-window.js";
+import { BrowserContext } from "./browser-context.js";
 import { NewWindowMessageData, WindowOptions } from "./types";
 
 /** Helper to determine if current context is the top window */
@@ -55,7 +55,7 @@ export function init(options?: WindowOptions): NewWindowMessageData {
  * - iframe
  * - popup
  */
-export function createWindow(src: string, options?: WindowOptions): OpenedWindow {
+export function createWindow(src: string, options?: WindowOptions): BrowserContext {
   options = options || {};
 
   const isPopup = options.isPopup || false;
@@ -66,7 +66,7 @@ export function createWindow(src: string, options?: WindowOptions): OpenedWindow
   initialData.id = options.id || generateId();
 
   const win = (isPopup ? createPopup : createIframe)(src, initialData, options);
-  return new OpenedWindow(initialData.id, win, getOrigin(src));
+  return new BrowserContext(initialData.id, win, getOrigin(src));
 }
 
 /**

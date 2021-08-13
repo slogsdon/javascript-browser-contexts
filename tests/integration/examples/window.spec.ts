@@ -2,7 +2,7 @@
 
 import {
   createWindow,
-  currentOpenedWindows,
+  currentBrowserContexts,
   getObjectKeys,
 } from "../../support/helpers";
 
@@ -15,21 +15,21 @@ context('createWindow', () => {
 
   it('should not have opened windows without calling createWindow', async () => {
     cy.window().then((win) => {
-      expect(getObjectKeys(currentOpenedWindows(win))).to.be.empty;
+      expect(getObjectKeys(currentBrowserContexts(win))).to.be.empty;
     });
   });
 
   it('should allow an iframe to be created', async () => {
     createWindow(href + 'child.html').then((data) => {
       const {win, } = data;
-      expect(getObjectKeys(currentOpenedWindows(win))).to.have.lengthOf(1);
+      expect(getObjectKeys(currentBrowserContexts(win))).to.have.lengthOf(1);
     });
   });
 
   it('should allow a popup to be created', async () => {
     createWindow(href + 'child.html', { isPopup: true }).then((data) => {
       const {win, } = data;
-      expect(getObjectKeys(currentOpenedWindows(win))).to.have.lengthOf(1);
+      expect(getObjectKeys(currentBrowserContexts(win))).to.have.lengthOf(1);
     });
   });
 });

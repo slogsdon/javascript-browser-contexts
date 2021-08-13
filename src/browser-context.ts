@@ -1,7 +1,7 @@
 import { WindowOptions } from "./types";
 
 export interface IKnownWindows {
-  [key: string]: OpenedWindow;
+  [key: string]: BrowserContext;
 }
 const knownWindows: IKnownWindows = {};
 
@@ -11,7 +11,7 @@ const knownWindows: IKnownWindows = {};
  * - iframe
  * - popup
  */
-export class OpenedWindow {
+export class BrowserContext {
   /** Current window's unique ID */
   public id: string;
   /** Current window's origin */
@@ -119,7 +119,7 @@ export class OpenedWindow {
   }
 
   /**
-   * Gets all known `OpenedWindow` instances
+   * Gets all known `BrowserContext` instances
    */
   static all(): IKnownWindows {
     return knownWindows;

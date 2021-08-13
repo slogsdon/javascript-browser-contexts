@@ -1,14 +1,14 @@
 /// <reference types="cypress" />
-import { IKnownWindows, OpenedWindow } from '../../src/opened-window';
+import { IKnownWindows, BrowserContext } from '../../src/browser-context';
 import { WindowOptions } from '../../src/types';
 
 export type FixtureWindow = Cypress.AUTWindow & {
-  createWindow: (src: string, options?: WindowOptions) => OpenedWindow;
-  getAllOpenedWindows: () => IKnownWindows;
+  createWindow: (src: string, options?: WindowOptions) => BrowserContext;
+  getAllBrowserContexts: () => IKnownWindows;
 }
 
 export interface CreateWindowHelperResult {
-  createdWindow: OpenedWindow;
+  createdWindow: BrowserContext;
   win: FixtureWindow;
 }
 
@@ -20,8 +20,8 @@ export function getObjectKeys(obj: Record<string, unknown>): string[] {
   return result;
 }
 
-export function currentOpenedWindows(win: Cypress.AUTWindow | FixtureWindow): IKnownWindows {
-  return (win as FixtureWindow).getAllOpenedWindows() || {};
+export function currentBrowserContexts(win: Cypress.AUTWindow | FixtureWindow): IKnownWindows {
+  return (win as FixtureWindow).getAllBrowserContexts() || {};
 }
 
 export function createWindow(src: string, options?: WindowOptions): Promise<CreateWindowHelperResult> {
