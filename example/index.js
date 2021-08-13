@@ -1,4 +1,5 @@
 // @ts-check
+/* global window, document, console */
 
 import { init, createWindow, OpenedWindow } from "../lib/browser-contexts.js";
 
@@ -21,7 +22,7 @@ createIframe && createIframe.addEventListener("click", () => {
 
   // take action once the iframe is loaded
   iframe.onload(() => {
-    iframe.postMessage("hello iframe");
+    iframe.postMessage({"message": "hello iframe"});
     console.log(OpenedWindow.all());
   });
 });
@@ -38,7 +39,7 @@ createNestedIframe && createNestedIframe.addEventListener("click", () => {
 
   // take action once the iframe is loaded
   iframe.onload(() => {
-    iframe.postMessage("hello nested iframe");
+    iframe.postMessage({"message": "hello nested iframe"});
     console.log(OpenedWindow.all());
   });
 });
@@ -53,6 +54,6 @@ createPopup && createPopup.addEventListener("click", () => {
 
   // take action once the popup is loaded
   popup.onload(() => {
-    popup.postMessage("hello popup");
+    popup.postMessage({"message": "hello popup"});
   });
 });
