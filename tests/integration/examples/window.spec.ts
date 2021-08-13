@@ -1,30 +1,35 @@
 /// <reference types="cypress" />
 
-const href = 'http://localhost:8888/tests/fixtures/';
-const currentOpenedWindows = (win: any) => win.getAllOpenedWindows();
+import {
+  createWindow,
+  currentOpenedWindows,
+  getObjectKeys,
+} from "../../support/helpers";
 
-context('Window', () => {
+const href = 'http://localhost:8888/tests/fixtures/';
+
+context('createWindow', () => {
   beforeEach(() => {
     cy.visit(href + 'index.html');
   });
 
-  it('should not have opened windows without calling library', async () => {
-    cy.window().then((win: any) => {
-      expect(Object.keys(win.getAllOpenedWindows())).to.be.empty;
+  it('should not have opened windows without calling createWindow', async () => {
+    cy.window().then((win) => {
+      expect(getObjectKeys(currentOpenedWindows(win))).to.be.empty;
     });
   });
 
   it('should allow an iframe to be created', async () => {
-    cy.window().then((win: any) => {
-      const iframe = win.createWindow(href + 'child.html');
+    createWindow(href + 'child.html').then((data) => {
+      const {win, } = data;
+      expect(getObjectKeys(currentOpenedWindows(win))).to.have.lengthOf(1);
+    });
+  });
 
-      // iframes need to be appended to the DOM in order to load
-      iframe.appendTo(win.document.body);
-
-      // make assertions once the iframe is loaded
-      iframe.onload(() => {
-        expect(Object(currentOpenedWindows(win)).keys()).to.have.lengthOf(1);
-      });
+  it('should allow a popup to be created', async () => {
+    createWindow(href + 'child.html', { isPopup: true }).then((data) => {
+      const {win, } = data;
+      expect(getObjectKeys(currentOpenedWindows(win))).to.have.lengthOf(1);
     });
   });
 });
