@@ -1,4 +1,4 @@
-import { OpenedWindow } from "./opened-window";
+import { OpenedWindow } from "./opened-window.js";
 import { NewWindowMessageData, WindowOptions } from "./types";
 
 /** Helper to determine if current context is the top window */

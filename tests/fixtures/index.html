@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<div>
+  <button id="create-iframe" type="button">Create iFrame</button>
+  <button id="create-nested-iframe" type="button">Create nested iFrame</button>
+  <button id="create-popup" type="button">Create popup</button>
+</div>
+<script type="module">
+  import { createWindow, OpenedWindow } from "../../lib/browser-contexts.js";
+  window.getAllOpenedWindows = () => OpenedWindow.all();
+  window.createWindow = (src, options) => createWindow(src, options);
+</script>

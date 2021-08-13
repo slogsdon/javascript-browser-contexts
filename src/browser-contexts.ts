@@ -1,2 +1,2 @@
-export * from "./opened-window";
-export * from "./helpers";
+export * from "./opened-window.js";
+export * from "./helpers.js";

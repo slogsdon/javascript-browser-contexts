@@ -35,7 +35,7 @@
     "cypress:run": "cypress run",
     "prepublishOnly": "npm run build",
     "start": "php -S 0.0.0.0:8888",
-    "test": "eslint && start-server-and-test start http://localhost:8888/example/ cypress:run"
+    "test": "eslint && start-server-and-test start http://localhost:8888/tests/fixtures/ cypress:run"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.27.0",
