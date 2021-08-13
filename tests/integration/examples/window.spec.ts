@@ -14,22 +14,20 @@ context('createWindow', () => {
   });
 
   it('should not have opened windows without calling createWindow', async () => {
-    cy.window().then((win) => {
-      expect(getObjectKeys(currentBrowserContexts(win))).to.be.empty;
+    cy.window().then((_win) => {
+      expect(getObjectKeys(currentBrowserContexts())).to.be.empty;
     });
   });
 
   it('should allow an iframe to be created', async () => {
-    createWindow(href + 'child.html').then((data) => {
-      const {win, } = data;
-      expect(getObjectKeys(currentBrowserContexts(win))).to.have.lengthOf(1);
+    createWindow(href + 'child.html').then((_data) => {
+      expect(getObjectKeys(currentBrowserContexts())).to.have.lengthOf(1);
     });
   });
 
   it('should allow a popup to be created', async () => {
-    createWindow(href + 'child.html', { isPopup: true }).then((data) => {
-      const {win, } = data;
-      expect(getObjectKeys(currentBrowserContexts(win))).to.have.lengthOf(1);
+    createWindow(href + 'child.html', { isPopup: true }).then((_data) => {
+      expect(getObjectKeys(currentBrowserContexts())).to.have.lengthOf(1);
     });
   });
 });

@@ -13,14 +13,14 @@
     "name": "Shane Logsdon"
   },
   "version": "0.5.8",
-  "main": "./lib/browser-contexts.js",
-  "module": "./lib/browser-contexts.js",
-  "types": "./lib/browser-contexts.d.ts",
+  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "exports": {
     ".": {
-      "require": "./lib/browser-contexts.js",
-      "import": "./lib/browser-contexts.js",
-      "default": "./lib/browser-contexts.js"
+      "require": "./lib/index.js",
+      "import": "./lib/index.js",
+      "default": "./lib/index.js"
     }
   },
   "sideEffects": false,
