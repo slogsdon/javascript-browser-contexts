@@ -1,8 +1,6 @@
 import { WindowOptions } from "./types";
 
-export interface IKnownWindows {
-  [key: string]: BrowserContext;
-}
+export type IKnownWindows = Record<string, BrowserContext>;
 const knownWindows: IKnownWindows = {};
 
 /**
@@ -36,27 +34,19 @@ export class BrowserContext {
     this.loaded = false;
     this.options = { id };
 
-    window.addEventListener("message", (e) => {
-      // verify expected origin
-      if (e.origin !== this.origin) {
-        return;
-      }
+    this.receive((data) => {
+      switch (data.action) {
+        case "load":
+          this.loaded = true;
+          this.options = data.options as WindowOptions || {};
 
-      // verify only load events are handled
-      if (!e.data.action || e.data.action !== "load") {
-        return;
-      }
-
-      // verify load event is triggered only for expected window
-      if (!e.data.windowId || e.data.windowId !== this.id) {
-        return;
-      }
-
-      this.loaded = true;
-      this.options = e.data.options || {};
-
-      if (this.onloadCallback) {
-        this.onloadCallback();
+          if (this.onloadCallback) {
+            this.onloadCallback();
+          }
+          break;
+        case "unload":
+          delete knownWindows[data.windowId as string];
+          break;
       }
     });
 
@@ -84,6 +74,22 @@ export class BrowserContext {
       // tslint:disable-next-line:no-console
       console.error(e);
     }
+  }
+
+  receive(fn: (data: Record<string, unknown>) => void): void {
+    window.addEventListener("message", (e) => {
+      // verify expected origin
+      if (e.origin !== this.origin) {
+        return;
+      }
+
+      // verify load event is triggered only for expected window
+      if (!e.data.windowId || e.data.windowId !== this.id) {
+        return;
+      }
+
+      fn(e.data);
+    });
   }
 
   /**
@@ -116,6 +122,19 @@ export class BrowserContext {
     target.appendChild(this.root);
     // ensure iframe has been added to the DOM
     knownWindows[this.id] = this;
+  }
+
+  close(): void {
+    if (!this.root) {
+      return;
+    }
+
+    if (this.root instanceof HTMLIFrameElement) {
+      this.root.parentNode?.removeChild(this.root);
+      return;
+    }
+
+    this.postMessage({ action: "close", windowId: this.id });
   }
 
   /**

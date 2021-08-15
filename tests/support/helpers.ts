@@ -1,7 +1,5 @@
 /// <reference types="cypress" />
-import { IKnownWindows, BrowserContext } from '../../src/browser-context';
-import { createWindow as cw } from '../../src';
-import { WindowOptions } from '../../src/types';
+import { IKnownWindows, BrowserContext } from '../../lib/browser-context';
 
 export interface CreateWindowHelperResult {
   createdWindow: BrowserContext;
@@ -18,20 +16,4 @@ export function getObjectKeys(obj: Record<string, unknown>): string[] {
 
 export function currentBrowserContexts(): IKnownWindows {
   return BrowserContext.all() || {};
-}
-
-export function createWindow(src: string, options?: WindowOptions): Promise<CreateWindowHelperResult> {
-  return new Promise((resolve) => {
-    cy.window().then((win: Cypress.AUTWindow) => {
-      const createdWindow = cw(src, options);
-
-      if (!options || !options.isPopup) {
-        // iframes need to be appended to the DOM in order to load
-        createdWindow.appendTo(win.document.body);
-      }
-
-      // allow assertions once the window is loaded
-      createdWindow.onload(() => resolve({ createdWindow, win }) );
-    });
-  });
 }

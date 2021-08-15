@@ -1,7 +1,7 @@
 // @ts-check
 /* global window, document, console */
 
-import { init, createWindow, BrowserContext } from "../lib/browser-contexts.js";
+import { init, createWindow, BrowserContext } from "../lib/index.js";
 
 // all windows should call init
 init();
@@ -55,5 +55,6 @@ createPopup && createPopup.addEventListener("click", () => {
   // take action once the popup is loaded
   popup.onload(() => {
     popup.postMessage({"message": "hello popup"});
+    popup.close();
   });
 });

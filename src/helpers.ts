@@ -1,4 +1,4 @@
-import { BrowserContext } from "./browser-context";
+import { BrowserContext } from "./browser-context.js";
 import { NewWindowMessageData, WindowOptions } from "./types";
 
 /** Helper to determine if current context is the top window */
@@ -38,9 +38,35 @@ export function init(options?: WindowOptions): NewWindowMessageData {
     windowId: initialData.id,
   };
 
+  const openerOrigin = options.origin || initialData.origin || window.location.origin;
+
+  window.addEventListener("unload", () => {
+    (isPopupWindow() && opener ? opener : parent)
+      .postMessage({action: "unload"}, openerOrigin);
+  })
+  window.addEventListener("message", (e) => {
+    // verify expected origin
+    if (e.origin !== openerOrigin) {
+      return;
+    }
+
+    // verify events are triggered only for expected window
+    if (e.data.windowId !== initialData.id) {
+      return;
+    }
+
+    switch (e.data.action) {
+      case "close":
+        self.close();
+        break;
+      default:
+        break;
+    }
+  });
+
   try {
     (isPopupWindow() && opener ? opener : parent)
-      .postMessage(loadMessage, options.origin || initialData.origin || window.location.origin);
+      .postMessage(loadMessage, openerOrigin);
   } catch (e) {
     // tslint:disable-next-line:no-console
     console.error(e);
@@ -102,6 +128,7 @@ function createIframe(src: string, initialData: NewWindowMessageData, options: W
   const win = document.createElement("iframe");
   if (initialData.id) {
     win.id = initialData.id;
+    win.name = initialData.id;
   }
   win.src = `${src}#${btoa(JSON.stringify(initialData))}`;
   win.width = (options.width || 10).toString();
