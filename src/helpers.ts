@@ -22,15 +22,7 @@ export function isPopupWindow(): boolean {
 export function init(options?: WindowOptions): NewWindowMessageData {
   options = options || {};
 
-  let initialData: NewWindowMessageData = {};
-
-  if (isPopupWindow() || !isTopWindow()) {
-    try {
-      initialData = JSON.parse(atob(window.location.hash.replace("#", "")));
-    } catch (e) {
-      /** catch in case other data is present in parent window hash */
-    }
-  }
+  const initialData = getInitialData();
 
   const loadMessage = {
     action: "load",
@@ -39,34 +31,12 @@ export function init(options?: WindowOptions): NewWindowMessageData {
   };
 
   const openerOrigin = options.origin || initialData.origin || window.location.origin;
+  const messageTarget = isPopupWindow() && opener ? opener : parent;
 
-  window.addEventListener("unload", () => {
-    (isPopupWindow() && opener ? opener : parent)
-      .postMessage({action: "unload"}, openerOrigin);
-  })
-  window.addEventListener("message", (e) => {
-    // verify expected origin
-    if (e.origin !== openerOrigin) {
-      return;
-    }
-
-    // verify events are triggered only for expected window
-    if (e.data.windowId !== initialData.id) {
-      return;
-    }
-
-    switch (e.data.action) {
-      case "close":
-        self.close();
-        break;
-      default:
-        break;
-    }
-  });
+  attachEventHanders(initialData, messageTarget, openerOrigin);
 
   try {
-    (isPopupWindow() && opener ? opener : parent)
-      .postMessage(loadMessage, openerOrigin);
+    messageTarget.postMessage(loadMessage, openerOrigin);
   } catch (e) {
     // tslint:disable-next-line:no-console
     console.error(e);
@@ -162,4 +132,40 @@ function generateGuid(): string {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
   };
   return `${S4()}${S4()}-${S4()}-${S4()}-${S4()}-${S4()}${S4()}${S4()})`;
+}
+
+function attachEventHanders(initialData: NewWindowMessageData, messageTarget: Window, openerOrigin: string) {
+  window.addEventListener("unload", () => {
+    messageTarget.postMessage({action: "unload"}, openerOrigin);
+  });
+  window.addEventListener("message", (e) => {
+    // verify expected origin
+    if (e.origin !== openerOrigin) {
+      return;
+    }
+
+    // verify events are triggered only for expected window
+    if (e.data.windowId !== initialData.id) {
+      return;
+    }
+
+    switch (e.data.action) {
+      case "close":
+        self.close();
+        break;
+      default:
+        break;
+    }
+  });
+}
+
+function getInitialData(): NewWindowMessageData {
+  if (isPopupWindow() || !isTopWindow()) {
+    try {
+      return JSON.parse(atob(window.location.hash.replace("#", "")));
+    } catch (e) {
+      /** catch in case other data is present in parent window hash */
+    }
+  }
+  return {};
 }
