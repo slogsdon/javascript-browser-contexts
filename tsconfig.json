@@ -5,6 +5,7 @@
   "compilerOptions": {
     "allowJs": true,
     "declaration": true,
+    "emitDeclarationOnly": true,
     "outDir": "./lib",
     "strict": true,
     "target": "es2015"

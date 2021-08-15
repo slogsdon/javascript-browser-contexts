@@ -1,4 +1,4 @@
-import { BrowserContext } from "./browser-context.js";
+import { BrowserContext } from "./browser-context";
 import { NewWindowMessageData, WindowOptions } from "./types";
 
 /** Helper to determine if current context is the top window */

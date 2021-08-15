@@ -1,2 +1,2 @@
-export * from "./browser-context.js";
-export * from "./helpers.js";
+export * from "./browser-context";
+export * from "./helpers";
